@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
 
-const POKEMON_GRAPHQL_API = "https://graphql-pokemon2.vercel.app/";
+const POKEMON_GRAPHQL_API = process.env.NEXT_PUBLIC_POKEMON_GRAPQL_API;
 
 function createApolloClient() {
   return new ApolloClient({
