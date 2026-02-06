@@ -1,56 +1,13 @@
 'use client';
 
 import { useMemo } from 'react';
-import Link from 'next/link';
+import type { Pokemon, PokemonDetails, PokemonEvolution } from '@/lib/graphql/types';
+import { AttackCard } from './resultComponents/AttackCard';
+import { EvolutionCard } from './resultComponents/EvolutionCard';
 import Image from 'next/image';
-import type { Pokemon, Attack, PokemonDetails, PokemonEvolution } from '@/lib/graphql/types';
 
 interface PokemonResultProps {
   pokemon: Pokemon;
-}
-
-function AttackCard({ attack, variant }: { attack: Attack; variant: 'fast' | 'special' }) {
-  return (
-    <div
-      className={`rounded-lg p-3 ${variant === 'fast'
-        ? 'bg-amber-50 dark:bg-amber-950/30'
-        : 'bg-purple-50 dark:bg-purple-950/30'
-        }`}
-    >
-      <div className="flex items-center justify-between">
-        <span className="font-medium text-zinc-900 dark:text-zinc-100">{attack.name}</span>
-        <span className="text-sm font-semibold text-zinc-600 dark:text-zinc-400">
-          {attack.damage} DMG
-        </span>
-      </div>
-      <span className="text-xs text-zinc-500 dark:text-zinc-500">{attack.type}</span>
-    </div>
-  );
-}
-
-function EvolutionCard({ evolution }: { evolution: PokemonDetails }) {
-  return (
-    <Link
-      href={`/search?name=${encodeURIComponent(evolution.name)}`}
-      className="group flex flex-col items-center rounded-lg border border-zinc-200 bg-white p-4 transition-all hover:border-blue-300 hover:shadow-md dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-blue-600"
-    >
-      {evolution.image && (
-        <div className="relative mb-2 h-20 w-20">
-          <Image
-            src={evolution.image}
-            alt={evolution.name}
-            fill
-            className="object-contain transition-transform group-hover:scale-110"
-            sizes="80px"
-          />
-        </div>
-      )}
-      <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-        {evolution.name}
-      </span>
-      <span className="text-xs text-zinc-500">#{evolution.number}</span>
-    </Link>
-  );
 }
 
 // Flatten evolution chain into a single array for display (unique by id)
