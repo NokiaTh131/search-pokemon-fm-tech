@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useTransition } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 const LAST_SEARCH_KEY = 'pokemon-last-search';
@@ -13,6 +13,7 @@ export function SearchInput({ initialValue = '' }: SearchInputProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [inputValue, setInputValue] = useState(initialValue);
+  const [isPending, startTransition] = useTransition();
 
   // Sync input with URL on mount
   useEffect(() => {
@@ -33,10 +34,12 @@ export function SearchInput({ initialValue = '' }: SearchInputProps) {
       e.preventDefault();
       const trimmedValue = inputValue.trim();
       if (trimmedValue) {
-        // Save to localStorage
+        // save last search to localstage
         localStorage.setItem(LAST_SEARCH_KEY, trimmedValue);
-        // Update URL
-        router.push(`/search?name=${encodeURIComponent(trimmedValue)}`);
+
+        startTransition(() => {
+          router.push(`/search?name=${encodeURIComponent(trimmedValue)}`);
+        });
       }
     },
     [inputValue, router]
@@ -68,9 +71,9 @@ export function SearchInput({ initialValue = '' }: SearchInputProps) {
         <button
           type="submit"
           className="rounded-lg bg-blue-600 px-6 py-3 font-medium text-white transition-colors hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500/50 disabled:opacity-50"
-          disabled={!inputValue.trim()}
+          disabled={!inputValue.trim() || isPending}
         >
-          Search
+          {isPending ? 'Searching...' : 'Search'}
         </button>
       </div>
     </form>

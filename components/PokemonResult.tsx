@@ -1,5 +1,6 @@
 'use client';
 
+import { useMemo } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import type { Pokemon, Attack, PokemonDetails, PokemonEvolution } from '@/lib/graphql/types';
@@ -12,8 +13,8 @@ function AttackCard({ attack, variant }: { attack: Attack; variant: 'fast' | 'sp
   return (
     <div
       className={`rounded-lg p-3 ${variant === 'fast'
-          ? 'bg-amber-50 dark:bg-amber-950/30'
-          : 'bg-purple-50 dark:bg-purple-950/30'
+        ? 'bg-amber-50 dark:bg-amber-950/30'
+        : 'bg-purple-50 dark:bg-purple-950/30'
         }`}
     >
       <div className="flex items-center justify-between">
@@ -52,7 +53,7 @@ function EvolutionCard({ evolution }: { evolution: PokemonDetails }) {
   );
 }
 
-// Flatten evolution chain into a single array for display (unique by ID)
+// Flatten evolution chain into a single array for display (unique by id)
 function flattenEvolutions(evolutions: PokemonEvolution[] | null): PokemonDetails[] {
   if (!evolutions) return [];
 
@@ -110,7 +111,11 @@ function TypeBadge({ type }: { type: string }) {
 }
 
 export function PokemonResult({ pokemon }: PokemonResultProps) {
-  const allEvolutions = flattenEvolutions(pokemon.evolutions);
+  // use memo for avoid recomputation on re-renders
+  const allEvolutions = useMemo(
+    () => flattenEvolutions(pokemon.evolutions),
+    [pokemon.evolutions]
+  );
 
   return (
     <article className="w-full max-w-2xl rounded-xl border border-zinc-200 bg-white p-6 shadow-sm dark:border-zinc-700 dark:bg-zinc-900">
