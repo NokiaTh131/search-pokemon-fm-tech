@@ -59,7 +59,7 @@ export function SearchInput({ initialValue = '' }: SearchInputProps) {
     }
   }, [addToHistory, router]);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.SubmitEvent) => {
     e.preventDefault();
     if (selectedIndex >= 0 && selectedIndex < filteredHistory.length) {
       performSearch(filteredHistory[selectedIndex]);
