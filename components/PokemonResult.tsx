@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import type { Pokemon, PokemonDetails, PokemonEvolution, PokemonEvolutionDetails } from '@/lib/graphql/types';
+import type { Pokemon, PokemonEvolution, PokemonEvolutionDetails } from '@/lib/graphql/types';
 import { AttackCard } from './resultComponents/AttackCard';
 import { EvolutionCard } from './resultComponents/EvolutionCard';
 import Image from 'next/image';
