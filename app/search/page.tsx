@@ -1,5 +1,7 @@
 import { Suspense } from "react";
 import { SearchInput, PokemonSearch, PokemonSkeleton } from "@/components";
+import { getClient } from "@/lib/apollo-client";
+import { GET_POKEMON } from "@/lib/graphql/queries";
 
 interface SearchPageProps {
   searchParams: Promise<{ name?: string }>;
@@ -8,6 +10,20 @@ interface SearchPageProps {
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
   const pokemonName = params.name || "";
+
+  let initialData = null;
+
+  if (pokemonName) {
+    try {
+      const { data } = await getClient().query({
+        query: GET_POKEMON,
+        variables: { name: pokemonName },
+      });
+      initialData = data;
+    } catch (error) {
+      console.error("Error fetching pokemon data on server:", error);
+    }
+  }
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-zinc-50 px-4 py-8 font-sans dark:bg-zinc-950">
@@ -27,7 +43,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
         {pokemonName && (
           <Suspense fallback={<PokemonSkeleton />}>
-            <PokemonSearch name={pokemonName} />
+            <PokemonSearch name={pokemonName} initialData={initialData} />
           </Suspense>
         )}
 

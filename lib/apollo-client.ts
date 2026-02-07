@@ -1,19 +1,19 @@
-import { ApolloClient, InMemoryCache, HttpLink } from "@apollo/client";
+import { HttpLink } from "@apollo/client";
+import {
+  registerApolloClient,
+  ApolloClient,
+  InMemoryCache,
+} from "@apollo/client-integration-nextjs";
 
-const POKEMON_GRAPHQL_API = process.env.NEXT_PUBLIC_POKEMON_GRAPQL_API;
+const POKEMON_GRAPHQL_API =
+  process.env.NEXT_PUBLIC_POKEMON_GRAPQL_API ||
+  "https://graphql-pokemon2.vercel.app/";
 
-function createApolloClient() {
+export const { getClient } = registerApolloClient(() => {
   return new ApolloClient({
+    cache: new InMemoryCache(),
     link: new HttpLink({
       uri: POKEMON_GRAPHQL_API,
     }),
-    cache: new InMemoryCache(),
-    defaultOptions: {
-      watchQuery: {
-        fetchPolicy: "cache-first",
-      },
-    },
   });
-}
-
-export const apolloClient = createApolloClient();
+});
