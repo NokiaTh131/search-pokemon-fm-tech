@@ -1,6 +1,6 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
-export const POKEMON_DETAILS_FRAGMENT = gql`
+const POKEMON_DETAILS_FRAGMENT = gql`
   fragment PokemonDetails on Pokemon {
     id
     number
@@ -40,17 +40,27 @@ export const POKEMON_DETAILS_FRAGMENT = gql`
   }
 `;
 
+const POKEMON_EVOLUTION_FRAGMENT = gql`
+  fragment PokemonEvolutionDetails on Pokemon {
+    id
+    name
+    number
+    image
+  }
+`;
+
 export const GET_POKEMON = gql`
   query pokemon($id: String, $name: String) {
     pokemon(id: $id, name: $name) {
       ...PokemonDetails
       evolutions {
-        ...PokemonDetails
+        ...PokemonEvolutionDetails
         evolutions {
-          ...PokemonDetails
+          ...PokemonEvolutionDetails
         }
       }
     }
   }
   ${POKEMON_DETAILS_FRAGMENT}
+  ${POKEMON_EVOLUTION_FRAGMENT}
 `;

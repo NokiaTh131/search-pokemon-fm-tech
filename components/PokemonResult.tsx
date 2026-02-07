@@ -185,9 +185,9 @@ export function PokemonResult({ pokemon }: PokemonResultProps) {
           <h3 className="mb-3 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
             Evolution Chain
           </h3>
-          {pokemon.evolutionRequirements && (
+          {pokemon.evolutionRequirements && pokemon.evolutions && (
             <p className="mb-3 text-sm text-zinc-500 dark:text-zinc-400">
-              Requires {pokemon.evolutionRequirements.amount} {pokemon.evolutionRequirements.name}
+              Requires {pokemon.evolutionRequirements.amount} {pokemon.evolutionRequirements.name} for evolution to {pokemon.evolutions[0].name}
             </p>
           )}
           <div className="flex flex-wrap items-center gap-2">

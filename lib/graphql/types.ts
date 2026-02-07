@@ -35,9 +35,16 @@ export interface PokemonDetails {
   evolutionRequirements: EvolutionRequirement | null;
 }
 
+export interface PokemonEvolutionDetails {
+  id: string;
+  name: string;
+  number: string;
+  image: string;
+}
+
 // evolution with nested
-export interface PokemonEvolution extends PokemonDetails {
-  evolutions: PokemonDetails[] | null;
+export interface PokemonEvolution extends PokemonEvolutionDetails {
+  evolutions: PokemonEvolutionDetails[] | null;
 }
 
 // main Pokemon type
@@ -46,6 +53,7 @@ export interface Pokemon extends PokemonDetails {
 }
 
 export interface PokemonQueryVariables {
+  id?: string;
   name?: string;
 }
 
