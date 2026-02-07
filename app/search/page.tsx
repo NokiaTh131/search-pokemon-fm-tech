@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { redirect } from "next/navigation";
 import { SearchInput, PokemonSearch, PokemonSkeleton } from "@/components";
 import { getClient } from "@/lib/apollo-client";
 import { GET_POKEMON } from "@/lib/graphql/queries";
@@ -9,20 +10,22 @@ interface SearchPageProps {
 
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
-  const pokemonName = params.name || "";
+  const pokemonName = params.name;
+
+  if (!pokemonName) {
+    redirect("/");
+  }
 
   let initialData = null;
 
-  if (pokemonName) {
-    try {
-      const { data } = await getClient().query({
-        query: GET_POKEMON,
-        variables: { name: pokemonName },
-      });
-      initialData = data;
-    } catch (error) {
-      console.error("Error fetching pokemon data on server:", error);
-    }
+  try {
+    const { data } = await getClient().query({
+      query: GET_POKEMON,
+      variables: { name: pokemonName },
+    });
+    initialData = data;
+  } catch (error) {
+    console.error("Error fetching pokemon data on server:", error);
   }
 
   return (
@@ -41,18 +44,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           <SearchInput initialValue={pokemonName} />
         </Suspense>
 
-        {pokemonName && (
-          <Suspense fallback={<PokemonSkeleton />}>
-            <PokemonSearch name={pokemonName} initialData={initialData} />
-          </Suspense>
-        )}
-
-        {!pokemonName && (
-          <div className="text-center text-zinc-500 dark:text-zinc-400">
-            <p className="text-lg">Enter a Pokemon name to get started</p>
-            <p className="mt-2 text-sm">Try: Pikachu, Charizard, Bulbasaur, Mewtwo</p>
-          </div>
-        )}
+        <Suspense fallback={<PokemonSkeleton />}>
+          <PokemonSearch name={pokemonName} initialData={initialData} />
+        </Suspense>
       </main>
 
       <footer className="mt-auto pt-8 text-center text-sm text-zinc-400 dark:text-zinc-600">

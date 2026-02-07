@@ -26,7 +26,7 @@ export function PokemonSearch({ name, initialData }: PokemonSearchProps) {
   const displayData = data || initialData;
 
 
-  if (loading || !displayData) {
+  if (loading && !displayData) {
     return <PokemonSkeleton />;
   }
 
