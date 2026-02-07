@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import type { Pokemon, PokemonDetails, PokemonEvolution } from '@/lib/graphql/types';
+import type { Pokemon, PokemonDetails, PokemonEvolution, PokemonEvolutionDetails } from '@/lib/graphql/types';
 import { AttackCard } from './resultComponents/AttackCard';
 import { EvolutionCard } from './resultComponents/EvolutionCard';
 import Image from 'next/image';
@@ -10,12 +10,12 @@ interface PokemonResultProps {
   pokemon: Pokemon;
 }
 
-// Flatten evolution chain into a single array for display (unique by id)
-function flattenEvolutions(evolutions: PokemonEvolution[] | null): PokemonDetails[] {
+// flatten evolution chain into a single array
+function flattenEvolutions(evolutions: PokemonEvolution[] | null): PokemonEvolutionDetails[] {
   if (!evolutions) return [];
 
   const seen = new Set<string>();
-  const result: PokemonDetails[] = [];
+  const result: PokemonEvolutionDetails[] = [];
 
   for (const evo of evolutions) {
     if (!seen.has(evo.id)) {

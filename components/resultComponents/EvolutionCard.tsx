@@ -1,8 +1,8 @@
 import Link from "next/link";
 import Image from 'next/image';
-import { PokemonDetails } from "@/lib/graphql/types";
+import { PokemonEvolutionDetails } from "@/lib/graphql/types";
 
-export function EvolutionCard({ evolution }: { evolution: PokemonDetails }) {
+export function EvolutionCard({ evolution }: { evolution: PokemonEvolutionDetails }) {
   return (
     <Link
       href={`/search?name=${encodeURIComponent(evolution.name)}`}
