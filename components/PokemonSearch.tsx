@@ -8,7 +8,7 @@ import { PokemonSkeleton } from './PokemonSkeleton';
 
 interface PokemonSearchProps {
   name: string;
-  initialData?: any;
+  initialData?: PokemonQueryResult | null;
 }
 
 export function PokemonSearch({ name, initialData }: PokemonSearchProps) {
