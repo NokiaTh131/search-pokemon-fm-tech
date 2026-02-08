@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { SearchInput, PokemonSearch, PokemonSkeleton, Header, Footer } from "@/components";
 import { getClient } from "@/lib/apollo-client";
 import { GET_POKEMON } from "@/lib/graphql/queries";
+import { PokemonQueryResult } from "@/lib/graphql/types";
 
 interface SearchPageProps {
   searchParams: Promise<{ name?: string }>;
@@ -16,14 +17,14 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     redirect("/");
   }
 
-  let initialData = null;
+  let initialData: PokemonQueryResult | null = null;
 
   try {
-    const { data } = await getClient().query({
+    const { data } = await getClient().query<PokemonQueryResult>({
       query: GET_POKEMON,
       variables: { name: pokemonName },
     });
-    initialData = data;
+    initialData = data ?? null;
   } catch (error) {
     console.error("Error fetching pokemon data on server:", error);
   }
